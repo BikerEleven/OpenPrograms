@@ -3,7 +3,6 @@ local PullHooks = {}; --Holds threads that listen to all events, ex overriden os
 local Threads = {}; --Threads that are running or will be ran, FIFO {1={function, {data}}}
 local AllowTerminate = true;
 local BlackList = {}; --Restricted events
-local oldFuncts = {}; --Overrided global functions
 local running = false;
 
 --This will process the event we received
@@ -95,7 +94,7 @@ local function threadDispatch() --Thread Dispatch loop - CORE, will manage all c
 end
 
 local function eventDispatch() --Event Dispatch loop - CORE, will pull all events that get thrown then send them off to where they need to go
-    data = {os.pullEventRaw()}; --Pull an event
+    data = {computer.pullSignal()}; --Pull an event
 
     if data[1] == "terminate" then  --If its the terminate event
         if AllowTerminate then --Check if its allowed
@@ -186,15 +185,6 @@ end
 function start() --Will become the new toplevel process and kick off eventdispatch and thread dispatch
     
     running = true;
-    oldFuncts.pullEvent = os.pullEvent; --We will overload os.pullEvent so save the original function
-    os.pullEvent = pullEvent; --Overload os.pullEvent to use our pullEvent function
-    oldFuncts.colorSubtract = colors.subtract; --This is broken in computercraft 1.74 so I replace it with bxor
-    
-    if bit32 then
-        colors.subtract = bit32.bxor;
-    else
-        colors.subtract = bit.bxor;
-    end
     
     while running do
         
@@ -203,8 +193,6 @@ function start() --Will become the new toplevel process and kick off eventdispat
         
     end
     
-    os.pullEvent = oldFuncts.pullEvent; --And finally restore the original pullEvent
-    colors.subtract = oldFuncts.colorSubtract;
     term.clear();
     term.setCursorPos(1, 1);
     

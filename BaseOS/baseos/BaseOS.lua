@@ -2,57 +2,37 @@ debuging = false;
 
 local Running = false; --If the main loop is running
 local loaded = false; --Used to see if BaseOS is finished loading the core moduals
-local sides = {} --This holds pheripheral data
-local runingRednet = false; --If rednet is currently runing or not, should be in networking but the peripheral stuff is over here
-local rednetSide = ""; --The side or name of the modem we are using for rednet
+local components = {} --This holds pheripheral data
 local location = "";
 
 local version = 0; --BaseOS interal version, mostly for shows
 
-local function getPeripherals() --Used at startup to quickly catalog all attached peripherals
-
-    stuff = peripheral.getNames();
-
-    for _, v in pairs(stuff) do
-        sides[v] = peripheral.getType(v); --Add it into the sides array
-        if sides[v] == "modem" and peripheral.wrap(v).isWireless() then --If its a wireless modem
-            if runingRednet == false then --If we currently don't have a rednet modem open
-                rednet.open(v);
-                runingRednet = true;
-                rednetSide = v; --Open it and set the modem that we are using
-            end
-            sides[v] = "wirelessmodem" --Rename the modem to wireless modem to make it easier to find
+local function getComponents() --Used at startup to quickly catalog all attached peripherals
+    
+    for address, componentType in component.list() do
+        if components[componentType] == nil then
+            components[componentType] = component.proxy(address);
         end
     end
 
 end
 
-local function attachPeripheral(_, name) --Updates the peripheral list
+local function attachComponent(address, compType) --Updates the peripheral list
 
-    sides[name] = peripheral.getType(name);
-    if sides[name] == "modem" and peripheral.wrap(name).isWireless() then
-        if runingRednet == false then --If we currently don't have a rednet modem open
-            rednet.open(name);
-            runingRednet = true; --Open it and set this modem as being used
-            rednetSide = name;
-        end
-        sides[name] = "wirelessmodem" --And rename it to make it easy to find
+    if components[compType] == nil then
+        components[compType] = component.proxy(address);
+        computer.pushSignal("component_available", compType);
     end
 
 end
 
-local function detachPeripheral(_, name) --Updates the peripheral list
-
-    sides[name] = nil; --Just remove it
-    if name == rednetSide then --If we where using that modem
-        runingRednet = false; --We have to set rednet runing to false
-        rednetSide = "";
-        for k, v in pairs(sides) do
-            if v == "wirelessmodem" and peripheral.wrap(k).isWireless() then --Search for a new modem to use
-                rednet.open(k); --If we find a new one open it and set it to our currently used modem
-                runingRednet = true;
-                rednetSide = k;
-            end
+local function detachComponent(address, compType) --Updates the peripheral list
+    
+    if components[compType] ~= nil then
+        if component.list(compType, true)() ~= nil then
+            components[compType] = component.proxy(component.list(compType, true)());
+        else
+            computer.pushSignal("component_unavailable", compType);
         end
     end
 
@@ -110,26 +90,26 @@ local function init() --This will load all of the APIs that BaseOS uses and atta
     --print("loading debug");
     --debug = dofile( location.."baseos/debug" );
     print("loading utils");
-    work, p1 = os.loadAPI( location.."baseos/utils" ); if not work then error(p1); end
+    work, p1 = loadAPI( location.."baseos/utils.lua" ); if not work then error(p1); end
     print("loading hook");
-    work, p1 = os.loadAPI( location.."baseos/hook" ); if not work then error(p1); end
+    work, p1 = loadAPI( location.."baseos/hook.lua" ); if not work then error(p1); end
     print("loading network");
-    work, p1 = os.loadAPI( location.."baseos/network" ); if not work then error(p1); end
+    work, p1 = loadAPI( location.."baseos/network.lua" ); if not work then error(p1); end
     print("loading sync");
-    work, p1 = os.loadAPI( location.."baseos/sync" ); if not work then error(p1); end
+    work, p1 = loadAPI( location.."baseos/sync.lua" ); if not work then error(p1); end
     print("loading settings");
-    work, p1 = os.loadAPI( location.."baseos/settings" ); if not work then error(p1); end
+    work, p1 = loadAPI( location.."baseos/settings.lua" ); if not work then error(p1); end
     print("loading user");
-    work, p1 = os.loadAPI( location.."baseos/user" ); if not work then error(p1); end
+    work, p1 = loadAPI( location.."baseos/user.lua" ); if not work then error(p1); end
     print("loading menu");
-    work, p1 = os.loadAPI( location.."baseos/menu" ); if not work then error(p1); end
+    work, p1 = loadAPI( location.."baseos/menu.lua" ); if not work then error(p1); end
     
-    hook.addHook("BaseOS.peripheral_attach", "peripheral", attachPeripheral); --Used to update sides array
-    hook.addHook("BaseOS.peripheral_detach", "peripheral_detach", detachPeripheral); --Used to update sides array
+    hook.addHook("BaseOS.component_attach", "component_added", attachComponent); --Used to update components array
+    hook.addHook("BaseOS.component_detach", "component_removed", detachComponent); --Used to update components array
 
     log("##########BaseOS Setup finished##########\n\n");
 
-    getPeripherals(); --Used to create the sides array
+    getComponents(); --Used to create the components array
 
 end
 
@@ -176,19 +156,9 @@ function clearScr() --Will clear the screen and add the BaseOS label
     os.queueEvent("BaseOS.clearScreen");
 end
 
-function isRednetOpen() --Just a little accessor
-    return runingRednet;
-end
+function getComponent(componentType) --Returns the component using our components array
 
-function getSide(object) --Returns the side (or name) a pheripheral is on using our sides array
-
-    for k,v in pairs(sides) do
-        if v == object then
-            return k;
-        end
-    end
-
-    return nil;
+    return components[componentType];
 
 end
 
