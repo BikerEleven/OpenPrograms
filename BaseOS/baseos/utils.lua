@@ -1,6 +1,8 @@
 local utils = {};
 local component = component or require("component");
 
+local dataEnabled = false;
+
 local function quickSort(array, left, right, index)
 
     i = left;
@@ -63,6 +65,8 @@ if component.list("data", true)() ~= nil then
     local data = component.proxy(component.list("data", true)());
     if data.random ~= nil then
 
+		dataEnabled = true;
+	
         local privateKey = data.random(16);
         local publicKey = data.random(16);
         
@@ -87,6 +91,11 @@ if component.list("data", true)() ~= nil then
         end
         
     end
+end
+
+--Tests to see if the data card specific functions are enabled.
+function utils.isDataEnabled()
+	return dataEnabled;
 end
 
 --Implements a recursive quicksort

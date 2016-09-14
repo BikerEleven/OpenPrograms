@@ -1,3 +1,5 @@
+local hook = {};
+
 local Hooks = {};  --Events that are queued {"event"={"uid"=function}}
 local PullHooks = {}; --Holds threads that listen to all events, ex overriden os.pullEvents {1={filter, coroutine}}
 local Threads = {}; --Threads that are running or will be ran, FIFO {1={function, {data}}}
@@ -98,7 +100,7 @@ local function eventDispatch() --Event Dispatch loop - CORE, will pull all event
 
     if data[1] == "terminate" then  --If its the terminate event
         if AllowTerminate then --Check if its allowed
-            stop(); --If yes stop running
+            hook.stop(); --If yes stop running
         end
     else
         processEvent( data ); --Otherwise if its not wake or terminate send the event to be processed
@@ -106,7 +108,9 @@ local function eventDispatch() --Event Dispatch loop - CORE, will pull all event
     
 end
 
-function addHook(id, event, callback) --Add an function that will be called on an event or "*" for all events
+----------------------------------------------------------------------------------------
+
+function hook.addHook(id, event, callback) --Add an function that will be called on an event or "*" for all events
     
     for _,v in ipairs(BlackList) do
         if v == event then
@@ -130,7 +134,7 @@ function addHook(id, event, callback) --Add an function that will be called on a
 
 end
 
-function removeHook(id, event) --Remove the function from the event queue
+function hook.removeHook(id, event) --Remove the function from the event queue
     if id == nil or id == "" then
         error("Hook id must not be nil");
     end
@@ -150,7 +154,7 @@ function removeHook(id, event) --Remove the function from the event queue
     end
 end
 
-function pullEvent(filter) --Replacement for os.pullEvent
+function hook.pullEvent(filter) --Replacement for os.pullEvent
     if BaseOS then
         BaseOS.log("PullEvent "..tostring(filter).." "..tostring(coroutine.running()));
     end
@@ -158,7 +162,7 @@ function pullEvent(filter) --Replacement for os.pullEvent
     return coroutine.yield();
 end
 
-function addCoroutine(funct, ...)   --Shortcut function to add a coroutine to the thread list
+function hook.addCoroutine(funct, ...)   --Shortcut function to add a coroutine to the thread list
     local params = {};
     params[1] = coroutine.create(funct);
     params[2] = {...};
@@ -170,19 +174,19 @@ function addCoroutine(funct, ...)   --Shortcut function to add a coroutine to th
     table.insert(Threads, params);
 end
 
-function setAllowTerminate(setting)
+function hook.setAllowTerminate(setting)
     if not running then --Only allow this setting to be changed while hook is not running
         AllowTerminate = setting;
     end
 end
 
-function setEventBlacklist(list)
+function hook.setEventBlacklist(list)
     if not running then --Only allow this setting to be changed while hook is not running
         BlackList = list;
     end
 end
 
-function start() --Will become the new toplevel process and kick off eventdispatch and thread dispatch
+function hook.start() --Will become the new toplevel process and kick off eventdispatch and thread dispatch
     
     running = true;
     
@@ -193,11 +197,12 @@ function start() --Will become the new toplevel process and kick off eventdispat
         
     end
     
-    term.clear();
-    term.setCursorPos(1, 1);
-    
 end
 
-function stop() --Stops hook from running
+function hook.stop() --Stops hook from running
     running = false;
 end
+
+----------------------------------------------------------------------------------------
+
+return hook;

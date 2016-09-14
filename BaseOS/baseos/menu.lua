@@ -1,4 +1,4 @@
---This is a messy file and also a very OLD file, this file still contains code from the first version of BaseOS from 2.5 years ago
+--This is a messy file and also a very OLD file, this file still contains code from the first version of BaseOS from ~2013
 --Only the new code has been commented
 
 local Submenus = {{}}; --All submenus that exist
@@ -11,9 +11,12 @@ local notifications = {};
 local noticeDisplay = false;
 local noticeID = -1;
 
-local MENU_UP_KEY = keys.w; --Key to go up, W 
-local MENU_DOWN_KEY = keys.s; --Key to go down, S
-local MENU_ENTER_KEY = keys.enter; --Key to enter, Enter
+local keyboard = require("keyboard");
+local term = require("term");
+
+local MENU_UP_KEY = keyboard.keys.w; --Key to go up, W 
+local MENU_DOWN_KEY = keyboard.keys.s; --Key to go down, S
+local MENU_ENTER_KEY = keyboard.keys.enter; --Key to enter, Enter
 
 --This checks item to see if it is a table and contains the correct named index
 local function isSubMenu( item )
