@@ -7,12 +7,14 @@ local run = false;
 
 local function checkForClick(x, y)
   for _, v in pairs(buttons) do
-    b = v.bounds;
-    if x >= b.x and x < (b.x + b.w) then
-      if y >= b.y and y < (b.y + b.h) then
-        comp.pushSignal("button_click", v.id);
-      end
-    end
+    if v.isEnabled then
+		b = v.bounds;
+		if x >= b.x and x < (b.x + b.w) then
+		  if y >= b.y and y < (b.y + b.h) then
+			comp.pushSignal("button_click", v.id);
+		  end
+		end
+	end
   end
 end
 
@@ -56,6 +58,7 @@ function button.makeButton()
     onHover = nil,
     bounds = {x=0, y=0, w=12, h=3},
     color = 0xFF0000,
+	dcolor = 0xFFFFFF,
     click = function() comp.pushSignal("button_click", uuid); end,
   };
 
@@ -78,7 +81,6 @@ function button.paint()
   background = gpu.getBackground();
   for _, btn in pairs(buttons) do
     if btn.isEnabled then
-
       b = btn.bounds;
       gpu.setBackground(btn.color);
       gpu.fill(b.x, b.y, b.w, b.h, " ");
@@ -91,16 +93,31 @@ function button.paint()
   gpu.setBackground(background);
 end
 
+function button.dePaint()
+	background = gpu.getBackground();
+	
+	for _, btn in pairs(buttons) do
+		b = btn.bounds;
+		gpu.setBackground(btn.dcolor);
+		gpu.fill(b.x, b.y, b.w, b.h, " ");
+	end
+	
+	gpu.setBackground(background);
+end
+
 function button.run()
   run = true;
   
-  while run do
+  while run do 
+	button.dePaint();
     button.paint();
     evt, _, x, y = require("event").pull(0.1, "touch");
     if evt then
        checkForClick(x, y);
     end
   end
+  
+  button.dePaint();
 end
 
 function button.stop()

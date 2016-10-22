@@ -57,6 +57,12 @@ local function explode(data, file, padd)
     file:write(padd.."}\n");
 end
 
+local function checkData()
+	if component.list("data", true)() ~= nil and data.random ~= nil then
+		
+	end
+end
+
 ----------------------------------------------------------------------------------------
 
 --Simple encryption system for the computer

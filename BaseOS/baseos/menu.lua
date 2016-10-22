@@ -132,7 +132,7 @@ local function edit() --Built in function that shutdown BaseOS and allows the us
 	sleep(5);
 	print("");
 	
-	utils.writeslowly("Goodbye Sir."); --Goodbye Karoline.
+	utils.writeslowly("Goodbye Sir."); --Goodbye Karolin.
 	sleep(2);
 	
 	BaseOS.clearScr();

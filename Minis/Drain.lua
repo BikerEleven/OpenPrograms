@@ -2,7 +2,7 @@ local component = require("component");
 local term = require("term");
 local sides = require("sides");
 
-local tp = component.transposer();
+local tp = component.transposer;
 
 local args = {...};
 
@@ -41,7 +41,7 @@ local function process(side, object)
     
 end
 
-while dimBlocks > 0 or dimIngots > 0 then
+while dimBlocks > 0 or dimIngots > 0 do
     
     process(blockSide, block);
     process(ingotSide, ingot);
