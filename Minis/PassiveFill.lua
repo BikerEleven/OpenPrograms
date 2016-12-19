@@ -18,7 +18,7 @@ local function checkFluid()
   stack = tp.getFluidInTank(tankSink)[1];
   worked = true;
 
-  if stack ~= nil and stack.amount < fluidAmmount then
+  if stack ~= nil and stack.amount < fluidAmount then
     worked = tp.transferFluid(tankProvider, tankSink, fluidAmount - stack.amount);
   elseif stack == nil then
     worked = tp.transferFluid(tankProvider, tankSink, fluidAmount);
