@@ -22,8 +22,8 @@ local dimBlocks = math.floor(amntFluid / block);
 local dimIngots = math.floor((amntFluid % block) / ingot);
 
 if not passive then
-	term.clear();
-	print("To Processes: "..dimBlocks.." blocks "..dimIngots.." ingots.");
+    term.clear();
+    print("To Processes: "..dimBlocks.." blocks "..dimIngots.." ingots.");
 end
 
 local function process(side, object)
@@ -47,22 +47,24 @@ local function process(side, object)
 end
 
 local function doProcesses()
-	while dimBlocks > 0 or dimIngots > 0 do
+    while dimBlocks > 0 or dimIngots > 0 do
     
-		process(blockSide, block);
-		process(ingotSide, ingot);
-		
-		if not passive then
-			term.setCursor(1, 2);
-			term.clearLine();
-			print("Processing: "..dimBlocks.." blocks, "..dimIngots.." ingots.");
-			os.sleep(1);
-		end
-		
-	end
+        process(blockSide, block);
+        process(ingotSide, ingot);
+        
+        if not passive then
+            term.setCursor(1, 2);
+            term.clearLine();
+            print("Processing: "..dimBlocks.." blocks, "..dimIngots.." ingots.");
+            os.sleep(1);
+        end
+        
+    end
 end
 
 if passive then
-	require("event").timer(0.05, doProcesses);
+    require("event").timer(0.05, doProcesses);
+else
+    doProcesses();
 end
 
