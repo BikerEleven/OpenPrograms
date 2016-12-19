@@ -78,7 +78,7 @@ local function doProcesses()
 end
 
 if passive then
-    timerId = require("event").timer(0.05, doProcesses, math.huge);
+    timerId = require("event").timer(1.5, doProcesses, math.huge);
 else
     doProcesses();
 end
