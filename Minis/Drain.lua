@@ -4,10 +4,13 @@ local sides = require("sides");
 
 local tp = component.transposer;
 
-local args = {...};
+--Options are -[p passive mode] [block amount, ingot amount]
+local args, ops = require("shell").parse(...);
 
-local block = args[1] or 1296;
-local ingot = args[2] or 144;
+if args[1] then tp = component.proxy(args[1]); end
+local block = args[2] or 1296;
+local ingot = args[3] or 144;
+local passive = ops.p or false;
 
 local blockSide = sides.east;
 local ingotSide = sides.west;
@@ -16,10 +19,12 @@ local outputSide = sides.up;
 
 local amntFluid = tp.getFluidInTank(smelterSide)[1].amount;
 local dimBlocks = math.floor(amntFluid / block);
-local dimIngots = math.floor(amntFluid % block);
+local dimIngots = math.floor((amntFluid % block) / ingot);
 
-term.clear();
-print("To Processes: "..dimBlocks.." blocks "..dimIngots.." ingots.");
+if not passive then
+	term.clear();
+	print("To Processes: "..dimBlocks.." blocks "..dimIngots.." ingots.");
+end
 
 local function process(side, object)
     
@@ -41,16 +46,23 @@ local function process(side, object)
     
 end
 
-while dimBlocks > 0 or dimIngots > 0 do
+local function doProcesses()
+	while dimBlocks > 0 or dimIngots > 0 do
     
-    process(blockSide, block);
-    process(ingotSide, ingot);
-    
-    term.setCursor(1, 2);
-    term.clearLine();
-    print("Processing: "..dimBlocks.." blocks, "..dimIngots.." ingots.");
-    os.sleep(1);
-    
+		process(blockSide, block);
+		process(ingotSide, ingot);
+		
+		if not passive then
+			term.setCursor(1, 2);
+			term.clearLine();
+			print("Processing: "..dimBlocks.." blocks, "..dimIngots.." ingots.");
+			os.sleep(1);
+		end
+		
+	end
 end
 
-print("Finished.");
+if passive then
+	require("event").timer(0.05, doProcesses);
+end
+

@@ -54,7 +54,7 @@ function addUser(user, pass, access) --Will add a user to the system, must be ro
 		if access == "root" or access == "admin" then
 			return;
 		end
-	elseif getAscessLevel(cUser) == 3 then --Clients can never add other users
+	elseif getAscessLevel(cUser) >= 3 then --Clients can never add other users
         return;
     end
 

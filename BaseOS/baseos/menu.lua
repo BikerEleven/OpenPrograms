@@ -124,7 +124,7 @@ local function doLogOff()
 
 end
 
-local function edit() --Built in function that shutdown BaseOS and allows the user to access the computers default shell
+local function edit() --Built in function to shutdown BaseOS and allows the user to access the computers default shell
 
 	BaseOS.clearScr();
 	term.setCursorBlink(true);
@@ -498,7 +498,7 @@ function evalInput(evt, key) --Event callback function, hooks char event used to
                         hook.addCoroutine(selctedMenu.actions[selectedMenuOption]);
                     end
 				else
-					error("Failed to add?!? corutine "..selectedMenuOption.." "..tostring(selctedMenu.actions[selectedMenuOption]));
+					error("Failed to add?!? coroutine "..selectedMenuOption.." "..tostring(selctedMenu.actions[selectedMenuOption]));
 				end
 			end
             
