@@ -180,7 +180,7 @@ function utils.sortedInsert(array, item, index)
     
 end
 
---Splits a string using a token
+--Splits a string using a token (token, string)
 function utils.split(d,p)
 	local t, ll
 	t={}
