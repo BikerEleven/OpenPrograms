@@ -7,6 +7,7 @@ local item = component.inventory_controller;
 local craft = component.crafting;
 
 local chestSide = sides.top;
+
 local cakeRecipe = {
     "minecraft:air", "minecraft:air", "minecraft:air", "minecraft:air",
     "minecraft:sugar", "minecraft:egg", "minecraft:sugar", "minecraft:air",

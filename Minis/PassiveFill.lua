@@ -2,7 +2,10 @@ local event = require("event");
 local sides = require("sides");
 local tp = require("component").transposer
 
-local timerId = -1;
+if _G.biker11 == nil then _G.biker11 = {}; end
+if _G.biker11.PassiveFill == nil then _G.biker11.PassiveFill = {}; end
+
+_G.biker11.PassiveFill.timerId = -1;
 
 local args, ops = require("shell").parse(...);
 
@@ -25,8 +28,8 @@ local function checkFluid()
   end
 
   if not worked then
-    event.cancel(timerId);
+    event.cancel(_G.biker11.PassiveFill.timerId);
   end
 end
 
-timerId = event.timer(1, checkFluid, math.huge);
+_G.biker11.PassiveFill.timerId = event.timer(1, checkFluid, math.huge);

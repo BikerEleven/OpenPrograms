@@ -56,9 +56,9 @@ function button.makeButton()
     onDown = function() end,
     onUp = function() end,
     onHover = nil,
-    bounds = {x=0, y=0, w=12, h=3},
+    bounds = {x=1, y=1, w=12, h=3},
     color = 0xFF0000,
-	dcolor = 0xFFFFFF,
+	dcolor = 0x000000,
     click = function() comp.pushSignal("button_click", uuid); end,
   };
 
