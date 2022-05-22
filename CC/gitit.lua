@@ -1,31 +1,5 @@
 local index;
 local state;
-term.clear();
-term.setCursorPos(1,1);
-
---[[
-{
-    ["BaseOS"] = {
-        name = "BaseOS",
-        desc = "Slim version of BaseOS for CC: Tweaked",
-        repo = "BikerEleven/OpenPrograms",
-        files = {
-            [":master/CC/baseos_slim"] = "/"
-        }
-    },
-    ["botanaDropper"] = {
-        name = "botanaDropper",
-        desc = "Botana Endoflame Dropper",
-        repo = "BikerEleven/OpenPrograms",
-        dep = {
-            ["Hook"] = "/"
-        },
-        files = {
-            [":"] = "/"
-        }
-    }
-}
---]]
 
 local function getName(url)
     local a, b = string.find(url, "/");
@@ -46,7 +20,7 @@ local function fetchIndex()
     print("Fetching remote index");
     local request = http.get("https://raw.githubusercontent.com/BikerEleven/OpenPrograms/master/.gititdex");
     if (request.getResponseCode() == 200) then
-        index = textutils.unserialize(file.readAll());
+        index = textutils.unserialize(request.readAll());
         local file = fs.open(".gititdex", "w");
         file.write(textutils.serialize(index));
         file.close();
@@ -75,9 +49,10 @@ local function getFile(remote, loc, optional)
 end
 
 local function install(prog)
-    state[prog["name"]] = {};
-    state[prog["name"]].name = prog["name"];
-    state[prog["name"]].files = {};
+    state[prog.name] = {};
+    state[prog.name].name = prog.name;
+    state[prog.name].hidden = prog.hidden == true;
+    state[prog.name].files = {};
     for git, store in pairs(prog.files) do
         if (string.sub(git, 1, 1) == ":") then
             local a = string.find(git, "/");
@@ -139,10 +114,10 @@ local function install(prog)
         end
     end
 
-    if prog.deps ~= nil then
-        for k, _ in pairs(prog.deps) do
+    if prog.dep ~= nil then
+        for k, _ in pairs(prog.dep) do
             install(index[k]);
-            if state[".libs"] == nil then state[".libs"] = {}; end
+            if state[".libs"] == nil then state[".libs"] = {}; state[".libs"].hidden = true; end
             if state[".libs"][k] == nil then state[".libs"][k] = {}; state[".libs"][k][".cnt"] = 0; end
             if state[".libs"][k][prog.name] == nil then state[".libs"][k][".cnt"] = state[".libs"][k][".cnt"] + 1; end
             state[".libs"][k][prog.name] = true;
@@ -176,17 +151,17 @@ local function recursiveDelete(path, front)
     end
 end
 
-local function remove(prog, deps)
+local function remove(prog, dep)
     for _, v in pairs(prog["files"]) do
         recursiveDelete(v, 1, 1);
     end
 
-    if deps ~= nil then
-        for k, _ in pairs(deps) do
+    if dep ~= nil then
+        for k, _ in pairs(dep) do
             state[".libs"][k][prog.name] = nil;
             state[".libs"][k][".cnt"] = state[".libs"][k][".cnt"] - 1;
             if state[".libs"][k][".cnt"] == 0 then
-                remove(state[k], index[k].deps);
+                remove(state[k], index[k].dep);
                 state[".libs"][k] = nil;
             end
         end
@@ -214,45 +189,113 @@ if fs.exists(".gititdex") then
     index = textutils.unserialize(file.readAll());
     file.close();
 else
+    term.clear();
+    term.setCursorPos(1,1);
     fetchIndex();
 end
 
 local args = {...};
 if (args[1] == "fetch") then
+    term.clear();
+    term.setCursorPos(1,1);
     fetchIndex()
 end
 
 if (args[1] == "install") then
-    local prog = index[string.lower(args[2])];
+    local prog = index[args[2]];
     if prog ~= nil then
-        if (state[prog["name"]] ~= nil) then
+        term.clear();
+        term.setCursorPos(1,1);
+        if (state[prog.name] ~= nil) then
             print("Removing old install");
-            remove(state[prog.name], prog.deps);
+            remove(state[prog.name], prog.dep);
         end
 
         print("Installing", prog["name"]);
         install(prog);
         print("Done!");
+    else
+        print("Program id not found");
     end
 end
 
 if (args[1] == "remove") then
-    local prog = state[string.lower(args[2])];
+    local prog = state[args[2]];
     if prog ~= nil then
-        print("Removing", string.lower(args[2]));
-        remove(prog, index[prog.name].deps);
-        print("Done!");
+        if state[".libs"] ~= nil and state[".libs"][args[2]] ~= nil then
+            print("Can't remove library that is in use");
+        else
+            term.clear();
+            term.setCursorPos(1,1);
+            print("Removing", args[2]);
+            remove(prog, index[prog.name].dep);
+            print("Done!");
+        end
+    else
+        print("Program id not found");
     end
 end
 
 if (args[1] == "list") then
+    term.clear();
+    term.setCursorPos(1,1);
+    print("Available:");
     for prog, _ in pairs(index) do
-        print(prog);
+        if index[prog].hidden ~= true then print(prog); end
     end
 end
 
 if (args[1] == "installed") then
+    term.clear();
+    term.setCursorPos(1,1);
+    print("Installed:");
     for prog, _ in pairs(state) do
-        print(prog);
+        if string.sub(prog, 1, 1) ~= "." and state[prog].hidden ~= true then print(prog); end
     end
+end
+
+if shell.getCompletionInfo()["gitit.lua"] == nil then
+    local comp = require("cc.completion");
+
+    local function compleatit(_, idx, argument, previous)
+        if idx == 1 then
+            local a = comp.choice(argument, {"remove"}, true);
+            local b = comp.choice(argument, {"fetch", "list", "install", "installed"}, false);
+            for _, k in ipairs(b) do
+                table.insert(a, k);
+            end
+            return a;
+        elseif idx == 2 then
+            if previous[2] == "remove" then
+                if fs.exists("/.gitit") then
+                    local file = fs.open(".gitit", "r");
+                    local istate = textutils.unserialize(file.readAll());
+                    file.close();
+
+                    local keys = {};
+                    for k, _ in pairs(istate) do
+                        if istate[".libs"][k] == nil and istate[k].hidden == false then
+                            table.insert(keys, k);
+                        end
+                    end
+
+                    return comp.choice(argument, keys, false);
+                end
+            elseif previous[2] == "install" then
+                if fs.exists("/.gititdex") then
+                    local file = fs.open(".gititdex", "r");
+                    local iindex = textutils.unserialize(file.readAll());
+                    file.close();
+
+                    local keys = {};
+                    for k, _ in pairs(iindex) do if iindex[k].hidden ~= true then table.insert(keys, k); end end
+                    return comp.choice(argument, keys, false);
+                end
+            end
+        end
+
+        return nil;
+    end
+
+    shell.setCompletionFunction("gitit.lua", compleatit);
 end

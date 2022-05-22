@@ -1,56 +1,57 @@
 {
-    ["BaseOS"] = {
-        name = "BaseOS",
-        desc = "Slim version of BaseOS for CC: Tweaked",
-        repo = "BikerEleven/OpenPrograms",
-        files = {
-            [":master/CC/baseos_slim"] = "/"
-        }
+  room = {
+    repo = "BikerEleven/OpenPrograms",
+    files = {
+      [ "master/CC/MiscCC/room.lua" ] = "/",
     },
-    ["botanaDropper"] = {
-        name = "botanaDropper",
-        desc = "Botana Endoflame Dropper",
-        repo = "BikerEleven/OpenPrograms",
-        dep = {
-            ["Hook"] = "/"
-        },
-        files = {
-            ["master/CC/MiscCC/botanaDropper.lua"] = "/"
-        }
+    name = "room",
+    desc = "Digs out a room"
+  },
+  Hook = {
+    repo = "BikerEleven/OpenPrograms",
+    files = {
+      [ "master/CC/hook.lua" ] = "/",
     },
-    ["convert"] = {
-        name = "convert",
-        desc = "Turns certus into charged certus",
-        repo = "BikerEleven/OpenPrograms",
-        files = {
-            ["master/CC/MiscCC/convert.lua"] = "/"
-        }
+    name = "Hook",
+    desc = "Hook is a event based coroutine driver"
+  },
+  BaseOS = {
+    repo = "BikerEleven/OpenPrograms",
+    files = {
+      [ ":master/CC/baseos_slim" ] = "/",
     },
-    ["room"] = {
-        name = "room",
-        desc = "Digs out a room",
-        repo = "BikerEleven/OpenPrograms",
-        files = {
-            ["master/CC/MiscCC/room.lua"] = "/"
-        }
+    name = "BaseOS",
+    desc = "Slim version of BaseOS for CC: Tweaked"
+  },
+  botanaDropper = {
+    repo = "BikerEleven/OpenPrograms",
+    name = "botanaDropper",
+    dep = {
+      Hook = "/",
     },
-    ["TreeMill"] = {
-        name = "TreeMill",
-        desc = "Turtle tree mill",
-        repo = "BikerEleven/OpenPrograms",
-        dep = {
-            ["Hook"] = "/"
-        },
-        files = {
-            ["master/CC/MiscCC/TreeMill.lua"] = "/"
-        }
+    files = {
+      [ "master/CC/MiscCC/botanaDropper.lua" ] = "/",
     },
-    ["Hook"] = {
-        name = "Hook",
-        desc = "Hook is a event based coroutine driver",
-        repo = "BikerEleven/OpenPrograms",
-        files = {
-            ["master/CC/hook.lua"] = "/"
-        }
-    }
+    desc = "Botana Endoflame Dropper",
+    hidden = true
+  },
+  TreeMill = {
+    repo = "BikerEleven/OpenPrograms",
+    name = "TreeMill",
+    dep = {
+      Hook = "/",
+    },
+    files = {
+      [ "master/CC/MiscCC/TreeMill.lua" ] = "/",
+    },
+    desc = "Turtle tree mill"
+  },
+  convert = {
+    repo = "BikerEleven/OpenPrograms",
+    files = {
+      [ "master/CC/MiscCC/convert.lua" ] = "/",
+    },
+    name = "convert",
+    desc = "Turns certus into charged certus"
+  },
 }
