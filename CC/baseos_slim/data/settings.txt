@@ -1,0 +1,58 @@
+{
+  [ "kd.wirecolor" ] = {
+    value = "1",
+    owner = "Keydoor",
+  },
+  logedinuser = {
+    value = "Biker11",
+    owner = "core",
+  },
+  [ "sd.castcolor" ] = {
+    value = "3",
+    owner = "SmelteryDrain",
+  },
+  [ "dc.doorstate" ] = {
+    value = "false",
+    owner = "DoorControl",
+  },
+  [ "dc.wirecolor" ] = {
+    value = "1",
+    owner = "DoorControl",
+  },
+  [ "kd.driveside" ] = {
+    value = "",
+    owner = "Keydoor",
+  },
+  [ "sd.peripheralcontroler" ] = {
+    value = "back",
+    owner = "SmelteryDrain",
+  },
+  [ "dc.wireside" ] = {
+    value = "back",
+    owner = "DoorControl",
+  },
+  keeplogin = {
+    value = "true",
+    owner = "core",
+  },
+  [ "sd.ingotcolor" ] = {
+    value = "1",
+    owner = "SmelteryDrain",
+  },
+  allowterminate = {
+    value = "true",
+    owner = "core",
+  },
+  [ "sd.wiredir" ] = {
+    value = "bottom",
+    owner = "SmelteryDrain",
+  },
+  [ "kd.wireside" ] = {
+    value = "back",
+    owner = "Keydoor",
+  },
+  [ "kd.islocked" ] = {
+    value = "false",
+    owner = "Keydoor",
+  },
+}

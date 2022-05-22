@@ -1,0 +1,56 @@
+{
+    ["BaseOS"] = {
+        name = "BaseOS",
+        desc = "Slim version of BaseOS for CC: Tweaked",
+        repo = "BikerEleven/OpenPrograms",
+        files = {
+            [":master/CC/baseos_slim"] = "/"
+        }
+    },
+    ["botanaDropper"] = {
+        name = "botanaDropper",
+        desc = "Botana Endoflame Dropper",
+        repo = "BikerEleven/OpenPrograms",
+        dep = {
+            ["Hook"] = "/"
+        },
+        files = {
+            ["master/CC/MiscCC/botanaDropper.lua"] = "/"
+        }
+    },
+    ["convert"] = {
+        name = "convert",
+        desc = "Turns certus into charged certus",
+        repo = "BikerEleven/OpenPrograms",
+        files = {
+            ["master/CC/MiscCC/convert.lua"] = "/"
+        }
+    },
+    ["room"] = {
+        name = "room",
+        desc = "Digs out a room",
+        repo = "BikerEleven/OpenPrograms",
+        files = {
+            ["master/CC/MiscCC/room.lua"] = "/"
+        }
+    },
+    ["TreeMill"] = {
+        name = "TreeMill",
+        desc = "Turtle tree mill",
+        repo = "BikerEleven/OpenPrograms",
+        dep = {
+            ["Hook"] = "/"
+        },
+        files = {
+            ["master/CC/MiscCC/TreeMill.lua"] = "/"
+        }
+    },
+    ["Hook"] = {
+        name = "Hook",
+        desc = "Hook is a event based coroutine driver",
+        repo = "BikerEleven/OpenPrograms",
+        files = {
+            ["master/CC/hook.lua"] = "/"
+        }
+    }
+}

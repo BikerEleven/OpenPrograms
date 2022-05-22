@@ -189,11 +189,11 @@ function utils.split(d,p)
 	while true do
 		l=string.find(p,d,ll,true) -- find the next d in the string
 		if l~=nil then -- if "not not" found then..
-				table.insert(t, string.sub(p,ll,l-1)) -- Save it in our array.
-				ll=l+1 -- save just after where we found it for searching next time.
+			table.insert(t, string.sub(p,ll,l-1)) -- Save it in our array.
+			ll=l+1 -- save just after where we found it for searching next time.
 		else
-				table.insert(t, string.sub(p,ll)) -- Save what's left in our array.
-				break -- Break at end, as it should be, according to the lua manual.
+			table.insert(t, string.sub(p,ll)) -- Save what's left in our array.
+			break -- Break at end, as it should be, according to the lua manual.
 		end
 	end
 	return t
@@ -211,9 +211,9 @@ end
 
 --Writes out text slowly
 function utils.writeslowly(Text) 
-
+	local term = term or require("term");
 	for i = 1, #Text, 1 do
-		require("term").write( Text:sub(i, i) );
+		term.write( Text:sub(i, i) );
 		os.sleep(0.05);
 	end
 
