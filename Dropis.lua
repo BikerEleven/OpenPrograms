@@ -141,6 +141,7 @@ local function craft(recipe)
     robot.turnRight();
     robot.up();
     robot.dropDown();
+    ---@diagnostic disable-next-line: undefined-field
     os.sleep(recipes[recipe].Delay or delay_default);
     robot.down();
     robot.down();
@@ -151,6 +152,7 @@ local function craft(recipe)
     robot.up();
     robot.drop();
 
+    ---@diagnostic disable-next-line: undefined-field
     os.sleep(5);
 end
 
