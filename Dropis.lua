@@ -7,7 +7,7 @@ local component = require("component");
 local inv = component.inventory_controller;
 local delay_default = 30
 
-local recipies = {
+local recipes = {
     Ender_Pearl = {
         Layers = {
             "Obsidian", "Obsidian", "Obsidian",
@@ -63,7 +63,7 @@ local recipies = {
 };
 
 local costs = {}; -- {enderpearl = {obsidian = 1, redstone = 1, gold = 1}, ...}
-for k, v in pairs(recipies) do
+for k, v in pairs(recipes) do
     v.Weight = 0
     costs[k] = {};
 
@@ -107,7 +107,7 @@ local function craft(recipe)
 
     local flip = false;
     for i = 1, 27 do
-        local item = recipies[recipe].Layers[i];
+        local item = recipes[recipe].Layers[i];
 
         if item ~= "Air" then
             robot.select(index[item]);
@@ -133,7 +133,7 @@ local function craft(recipe)
         end
     end
 
-    robot.select(index[recipies[recipe].Catalyst]);
+    robot.select(index[recipes[recipe].Catalyst]);
 
     robot.forward();
     robot.turnLeft();
@@ -141,7 +141,7 @@ local function craft(recipe)
     robot.turnRight();
     robot.up();
     robot.dropDown();
-    os.sleep(recipies[recipe].Delay or delay_default);
+    os.sleep(recipes[recipe].Delay or delay_default);
     robot.down();
     robot.down();
     robot.down();
@@ -175,7 +175,7 @@ local function checkRecipe()
     for tag, recipe in pairs(costs) do
         local fail = false;
 
-        if recipies[tag].Weight >= weight then
+        if recipes[tag].Weight >= weight then
             for name, amount in pairs(recipe) do
                 if have[name] == nil or have[name] < amount then
                     fail = true;
@@ -184,7 +184,7 @@ local function checkRecipe()
             end
 
             if not fail then
-                weight = recipies[tag].Weight;
+                weight = recipes[tag].Weight;
                 best = tag;
             end
         end
@@ -206,4 +206,4 @@ while run do
     end
 end
 
-return { recipies = recipies, costs = costs, checkRecipe = checkRecipe, craft = craft, checkInv = checkInv };
+return { recipies = recipes, costs = costs, checkRecipe = checkRecipe, craft = craft, checkInv = checkInv };
