@@ -12,9 +12,11 @@ local recipies = {
             "Obsidian", "Obsidian", "Obsidian",
             "Obsidian", "Obsidian", "Obsidian",
             "Obsidian", "Obsidian", "Obsidian",
+            --
             "Obsidian", "Obsidian", "Obsidian",
             "Obsidian", "Block of Redstone", "Obsidian",
             "Obsidian", "Obsidian", "Obsidian",
+            --
             "Obsidian", "Obsidian", "Obsidian",
             "Obsidian", "Obsidian", "Obsidian",
             "Obsidian", "Obsidian", "Obsidian"
@@ -29,9 +31,11 @@ local recipies = {
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+            --
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
             "Compact Machine Wall", "Block of Gold", "Compact Machine Wall",
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+            --
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
@@ -46,9 +50,11 @@ local recipies = {
             "Air", "Air", "Air",
             "Air", "Block of Iron", "Air",
             "Air", "Air", "Air",
+            --
             "Air", "Air", "Air",
             "Air", "Redstone", "Air",
             "Air", "Air", "Air",
+            --
             "Air", "Air", "Air",
             "Air", "Air", "Air",
             "Air", "Air", "Air",
