@@ -1,6 +1,7 @@
 local sapling = 1;
 local log = 2;
 local fuel = 3;
+local fertalizer = 4;
 
 local robot = require("robot");
 local term = require("term");
@@ -65,7 +66,7 @@ local function plantTree()
     robot.select(sapling);
 
     if robot.count(sapling)  <= 1 then
-        print("Waiiting for more saplings");
+        print("Waiting for more saplings");
         repeat
             os.sleep(1);
         until robot.count(sapling) > 1;
@@ -87,7 +88,7 @@ local function outputDrops()
 
             if i == log then
                 robot.drop(robot.count(i) - 1);
-            elseif i ~= sapling and i ~= fuel then
+            elseif i > 4 then
                 robot.drop();
             end
         end
@@ -95,15 +96,25 @@ local function outputDrops()
 
     local size = inv.getInventorySize(sides.front);
     local sapItem = inv.getStackInInternalSlot(sapling);
-    robot.select(sapling);
+    local fuelItem = inv.getStackInInternalSlot(fuel);
+    local fertItem = inv.getStackInInternalSlot(fertalizer);
 
     for i=1, size do
        local item = inv.getStackInSlot(sides.front, i);
         if item ~= nil and item.label == sapItem.label then
-            inv.suckFromSlot(sides.front, i, 32 - robot.count(sapling));
+            robot.select(sapling);
+            inv.suckFromSlot(sides.front, i, 64 - robot.count(sapling));
         end
 
-        if robot.count(sapling) > 32 then break; end
+        if item ~= nil and item.label == fuelItem.label then
+            robot.select(fuel);
+            inv.suckFromSlot(sides.front, i, 64 - robot.count(fuel));
+        end
+
+        if item ~= nil and fertItem ~= nil and item.label == fertItem.label then
+            robot.select(fertalizer);
+            inv.suckFromSlot(sides.front, i, 64 - robot.count(fertalizer));
+        end
     end
 
     robot.select(slot);
@@ -134,11 +145,28 @@ local function harvestTree()
     robot.select(log);
 end
 
+local function fertilizeTree()
+    if robot.count(fertalizer) > 1 then
+        local slot = robot.select();
+        robot.select(fertalizer);
+        inv.equip();
+        robot.use();
+        inv.equip();
+        robot.select(slot);
+    end
+end
+
 robot.select(log);
-while true do
+local run = true;
+
+while run do
     if robot.compare() then
         harvestTree();
+    else
+        fertilizeTree();
     end
 
-    os.sleep(1);
+    if event.pull(5, "interrupted") ~= nil then
+        run = false;
+    end
 end
