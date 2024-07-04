@@ -90,7 +90,7 @@ local function craft(recipe)
             robot.select(slot);
             index[item.label] = slot;
 
-            count = inv.suckFromSlot(sides.front, i, costs[recipe][item.label] - (have[item.label] or 0));
+            local count = inv.suckFromSlot(sides.front, i, costs[recipe][item.label] - (have[item.label] or 0));
             have[item.label] = (have[item.label] or 0) + count;
 
             if have[item.label] == costs[recipe][item.label] then slot = slot + 1; end
