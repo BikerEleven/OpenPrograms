@@ -5,6 +5,7 @@ local event = require("event");
 local sides = require("sides");
 local component = require("component");
 local inv = component.inventory_controller;
+local delay_default = 30
 
 local recipies = {
     Ender_Pearl = {
@@ -41,7 +42,6 @@ local recipies = {
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
         },
         Catalyst = "Ender Pearl",
-        Delay = 30,
         Weight = 27
     },
 
@@ -141,7 +141,7 @@ local function craft(recipe)
     robot.turnRight();
     robot.up();
     robot.dropDown();
-    os.sleep(recipies[recipe].Delay or 30);
+    os.sleep(recipies[recipe].Delay or delay_default);
     robot.down();
     robot.down();
     robot.down();
