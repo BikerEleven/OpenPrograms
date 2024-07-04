@@ -59,6 +59,108 @@ local recipes = {
         },
         Catalyst = "Redstone",
         Delay = 5
+    },
+
+    Maximum_Machine = {
+        Layers = {
+            "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+            "Compact Machine Wall", "Glitched Giant Machine", "Compact Machine Wall",
+            "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+            --
+            "Compact Machine Wall", "Glitched Giant Machine", "Compact Machine Wall",
+            "Glitched Giant Machine", "Machine Casing", "Glitched Giant Machine",
+            "Compact Machine Wall", "Glitched Giant Machine", "Compact Machine Wall",
+            --
+            "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+            "Compact Machine Wall", "Glitched Giant Machine", "Compact Machine Wall",
+            "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+        },
+        Catalyst = "Ender Pearl"
+    },
+
+    Giant_Machine = {
+        Layers = {
+            "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+            "Compact Machine Wall", "Glitched Large Machine", "Compact Machine Wall",
+            "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+            --
+            "Compact Machine Wall", "Glitched Large Machine", "Compact Machine Wall",
+            "Glitched Large Machine", "Machine Casing", "Glitched Large Machine",
+            "Compact Machine Wall", "Glitched Large Machine", "Compact Machine Wall",
+            --
+            "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+            "Compact Machine Wall", "Glitched Large Machine", "Compact Machine Wall",
+            "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+        },
+        Catalyst = "Ender Pearl"
+    },
+
+    Zombie_Egg = {
+        Layers = {
+            "Netherrack", "Netherrack", "Netherrack",
+            "Netherrack", "Netherrack", "Netherrack",
+            "Netherrack", "Netherrack", "Netherrack",
+            --
+            "Fire", "Fire", "Fire",
+            "Fire", "Soul Sand", "Fire",
+            "Fire", "Fire", "Fire",
+            --
+            "Air", "Air", "Air",
+            "Air", "Soul Sand", "Air",
+            "Air", "Air", "Air",
+        },
+        Catalyst = "Redstone"
+    },
+
+    Emerald_Block = {
+        Layers = {
+            "Slime Block", "Slime Block", "Slime Block",
+            "Slime Block", "Slime Block", "Slime Block",
+            "Slime Block", "Slime Block", "Slime Block",
+            --
+            "Slime Block", "Slime Block", "Slime Block",
+            "Slime Block", "Graphite Block", "Slime Block",
+            "Slime Block", "Slime Block", "Slime Block",
+            --
+            "Slime Block", "Slime Block", "Slime Block",
+            "Slime Block", "Slime Block", "Slime Block",
+            "Slime Block", "Slime Block", "Slime Block",
+        },
+        Catalyst = "Diamond Nugget"
+    },
+
+    Red_Mushroom = {
+        Layers = {
+            "Air", "Air", "Air",
+            "Air", "Oak Wood", "Air",
+            "Air", "Air", "Air",
+            --
+            "Air", "Air", "Air",
+            "Air", "Oak Wood", "Air",
+            "Air", "Air", "Air",
+            --
+            "Air", "Red Wool", "Air",
+            "Red Wool", "Red Wool", "Red Wool",
+            "Air", "Red Wool", "Air",
+        },
+        Catalyst = "Seeds"
+    },
+
+    Brown_Mushroom = {
+        Layers = {
+            "Air", "Air", "Air",
+            "Air", "Oak Wood", "Air",
+            "Air", "Air", "Air",
+            --
+            "Air", "Air", "Air",
+            "Air", "Oak Wood", "Air",
+            "Air", "Air", "Air",
+            --
+            "Air", "Brown Wool", "Air",
+            "Brown Wool", "Brown Wool", "Brown Wool",
+            "Air", "Brown Wool", "Air",
+        },
+        Catalyst = "Seeds"
     }
 };
 
