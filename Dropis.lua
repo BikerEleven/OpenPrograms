@@ -23,8 +23,7 @@ local recipies = {
             "Obsidian", "Obsidian", "Obsidian"
         },
         Catalyst = "Redstone",
-        Delay = 15,
-        Weight = 27
+        Delay = 15
     },
 
     Normal_Machine = {
@@ -41,8 +40,7 @@ local recipies = {
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
         },
-        Catalyst = "Ender Pearl",
-        Weight = 27
+        Catalyst = "Ender Pearl"
     },
 
     Machine_Casing = {
@@ -60,18 +58,20 @@ local recipies = {
             "Air", "Air", "Air",
         },
         Catalyst = "Redstone",
-        Delay = 5,
-        Weight = 2
+        Delay = 5
     }
 };
 
 local costs = {}; -- {enderpearl = {obsidian = 1, redstone = 1, gold = 1}, ...}
 for k, v in pairs(recipies) do
+    v.Weight = 0
     costs[k] = {};
 
     for i = 1, #v.Layers do
-        if v.Layers[i] ~= "Air" then
-            costs[k][v.Layers[i]] = (costs[k][v.Layers[i]] or 0) + 1;
+        local item = v.Layers[i]
+        if item ~= "Air" then
+            costs[k][item] = (costs[k][item] or 0) + 1;
+            v.Weight = v.Weight + 1
         end
     end
 
