@@ -63,8 +63,8 @@ local costs = {}; -- {enderpearl = {obsidian = 1, redstone = 1, gold = 1}, ...}
 for k, v in pairs(recipies) do
     costs[k] = {};
 
-    for i=1, #v.Layers do
-        if v.Layers[i] ~= "Air" then 
+    for i = 1, #v.Layers do
+        if v.Layers[i] ~= "Air" then
             costs[k][v.Layers[i]] = (costs[k][v.Layers[i]] or 0) + 1;
         end
     end
@@ -77,7 +77,7 @@ local function craft(recipe)
     local slot = 1;
 
     local have = {};
-    for i=1, inv.getInventorySize(sides.front) do
+    for i = 1, inv.getInventorySize(sides.front) do
         local item = inv.getStackInSlot(sides.front, i);
 
         if item ~= nil and costs[recipe][item.label] ~= nil and (have[item.label] or 0) < costs[recipe][item.label] then
@@ -100,14 +100,14 @@ local function craft(recipe)
     robot.down();
 
     local flip = false;
-    for i=1, 27 do
+    for i = 1, 27 do
         local item = recipies[recipe].Layers[i];
 
         if item ~= "Air" then
             robot.select(index[item]);
             robot.placeDown();
         end
-        
+
         if i % 9 == 0 then
             robot.up();
             robot.turnAround();
@@ -150,7 +150,7 @@ end
 
 local function checkInv()
     local have = {};
-    for i=1, inv.getInventorySize(sides.front) do
+    for i = 1, inv.getInventorySize(sides.front) do
         local item = inv.getStackInSlot(sides.front, i);
 
         if item ~= nil then
@@ -176,7 +176,7 @@ local function checkRecipe()
                     break;
                 end
             end
-    
+
             if not fail then
                 weight = recipies[tag].Weight;
                 best = tag;
@@ -200,4 +200,4 @@ while run do
     end
 end
 
-return {recipies = recipies, costs = costs, checkRecipe = checkRecipe, craft = craft, checkInv = checkInv};
+return { recipies = recipies, costs = costs, checkRecipe = checkRecipe, craft = craft, checkInv = checkInv };
