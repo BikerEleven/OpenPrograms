@@ -5,23 +5,25 @@ local event = require("event");
 local sides = require("sides");
 local component = require("component");
 local inv = component.inventory_controller;
+local delay_default = 30
 
-local recipies = {
+local recipes = {
     Ender_Pearl = {
         Layers = {
             "Obsidian", "Obsidian", "Obsidian",
             "Obsidian", "Obsidian", "Obsidian",
             "Obsidian", "Obsidian", "Obsidian",
+            --
             "Obsidian", "Obsidian", "Obsidian",
             "Obsidian", "Block of Redstone", "Obsidian",
             "Obsidian", "Obsidian", "Obsidian",
+            --
             "Obsidian", "Obsidian", "Obsidian",
             "Obsidian", "Obsidian", "Obsidian",
             "Obsidian", "Obsidian", "Obsidian"
         },
         Catalyst = "Redstone",
-        Delay = 15,
-        Weight = 27
+        Delay = 15
     },
 
     Normal_Machine = {
@@ -29,16 +31,16 @@ local recipies = {
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+            --
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
             "Compact Machine Wall", "Block of Gold", "Compact Machine Wall",
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+            --
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
         },
-        Catalyst = "Ender Pearl",
-        Delay = 30,
-        Weight = 27
+        Catalyst = "Ender Pearl"
     },
 
     Machine_Casing = {
@@ -46,26 +48,132 @@ local recipies = {
             "Air", "Air", "Air",
             "Air", "Block of Iron", "Air",
             "Air", "Air", "Air",
+            --
             "Air", "Air", "Air",
             "Air", "Redstone", "Air",
             "Air", "Air", "Air",
+            --
             "Air", "Air", "Air",
             "Air", "Air", "Air",
             "Air", "Air", "Air",
         },
         Catalyst = "Redstone",
-        Delay = 5,
-        Weight = 2
+        Delay = 5
+    },
+
+    Maximum_Machine = {
+        Layers = {
+            "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+            "Compact Machine Wall", "Glitched Giant Machine", "Compact Machine Wall",
+            "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+            --
+            "Compact Machine Wall", "Glitched Giant Machine", "Compact Machine Wall",
+            "Glitched Giant Machine", "Machine Casing", "Glitched Giant Machine",
+            "Compact Machine Wall", "Glitched Giant Machine", "Compact Machine Wall",
+            --
+            "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+            "Compact Machine Wall", "Glitched Giant Machine", "Compact Machine Wall",
+            "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+        },
+        Catalyst = "Ender Pearl"
+    },
+
+    Giant_Machine = {
+        Layers = {
+            "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+            "Compact Machine Wall", "Glitched Large Machine", "Compact Machine Wall",
+            "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+            --
+            "Compact Machine Wall", "Glitched Large Machine", "Compact Machine Wall",
+            "Glitched Large Machine", "Machine Casing", "Glitched Large Machine",
+            "Compact Machine Wall", "Glitched Large Machine", "Compact Machine Wall",
+            --
+            "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+            "Compact Machine Wall", "Glitched Large Machine", "Compact Machine Wall",
+            "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
+        },
+        Catalyst = "Ender Pearl"
+    },
+
+    Zombie_Egg = {
+        Layers = {
+            "Netherrack", "Netherrack", "Netherrack",
+            "Netherrack", "Netherrack", "Netherrack",
+            "Netherrack", "Netherrack", "Netherrack",
+            --
+            "Fire", "Fire", "Fire",
+            "Fire", "Soul Sand", "Fire",
+            "Fire", "Fire", "Fire",
+            --
+            "Air", "Air", "Air",
+            "Air", "Soul Sand", "Air",
+            "Air", "Air", "Air",
+        },
+        Catalyst = "Redstone"
+    },
+
+    Emerald_Block = {
+        Layers = {
+            "Slime Block", "Slime Block", "Slime Block",
+            "Slime Block", "Slime Block", "Slime Block",
+            "Slime Block", "Slime Block", "Slime Block",
+            --
+            "Slime Block", "Slime Block", "Slime Block",
+            "Slime Block", "Graphite Block", "Slime Block",
+            "Slime Block", "Slime Block", "Slime Block",
+            --
+            "Slime Block", "Slime Block", "Slime Block",
+            "Slime Block", "Slime Block", "Slime Block",
+            "Slime Block", "Slime Block", "Slime Block",
+        },
+        Catalyst = "Diamond Nugget"
+    },
+
+    Red_Mushroom = {
+        Layers = {
+            "Air", "Air", "Air",
+            "Air", "Oak Wood", "Air",
+            "Air", "Air", "Air",
+            --
+            "Air", "Air", "Air",
+            "Air", "Oak Wood", "Air",
+            "Air", "Air", "Air",
+            --
+            "Air", "Red Wool", "Air",
+            "Red Wool", "Red Wool", "Red Wool",
+            "Air", "Red Wool", "Air",
+        },
+        Catalyst = "Seeds"
+    },
+
+    Brown_Mushroom = {
+        Layers = {
+            "Air", "Air", "Air",
+            "Air", "Oak Wood", "Air",
+            "Air", "Air", "Air",
+            --
+            "Air", "Air", "Air",
+            "Air", "Oak Wood", "Air",
+            "Air", "Air", "Air",
+            --
+            "Air", "Brown Wool", "Air",
+            "Brown Wool", "Brown Wool", "Brown Wool",
+            "Air", "Brown Wool", "Air",
+        },
+        Catalyst = "Seeds"
     }
 };
 
 local costs = {}; -- {enderpearl = {obsidian = 1, redstone = 1, gold = 1}, ...}
-for k, v in pairs(recipies) do
+for k, v in pairs(recipes) do
+    v.Weight = 0
     costs[k] = {};
 
-    for i=1, #v.Layers do
-        if v.Layers[i] ~= "Air" then 
-            costs[k][v.Layers[i]] = (costs[k][v.Layers[i]] or 0) + 1;
+    for i = 1, #v.Layers do
+        local item = v.Layers[i]
+        if item ~= "Air" then
+            costs[k][item] = (costs[k][item] or 0) + 1;
+            v.Weight = v.Weight + 1
         end
     end
 
@@ -77,14 +185,14 @@ local function craft(recipe)
     local slot = 1;
 
     local have = {};
-    for i=1, inv.getInventorySize(sides.front) do
+    for i = 1, inv.getInventorySize(sides.front) do
         local item = inv.getStackInSlot(sides.front, i);
 
         if item ~= nil and costs[recipe][item.label] ~= nil and (have[item.label] or 0) < costs[recipe][item.label] then
             robot.select(slot);
             index[item.label] = slot;
 
-            count = inv.suckFromSlot(sides.front, i, costs[recipe][item.label] - (have[item.label] or 0));
+            local count = inv.suckFromSlot(sides.front, i, costs[recipe][item.label] - (have[item.label] or 0));
             have[item.label] = (have[item.label] or 0) + count;
 
             if have[item.label] == costs[recipe][item.label] then slot = slot + 1; end
@@ -100,14 +208,14 @@ local function craft(recipe)
     robot.down();
 
     local flip = false;
-    for i=1, 27 do
-        local item = recipies[recipe].Layers[i];
+    for i = 1, 27 do
+        local item = recipes[recipe].Layers[i];
 
         if item ~= "Air" then
             robot.select(index[item]);
             robot.placeDown();
         end
-        
+
         if i % 9 == 0 then
             robot.up();
             robot.turnAround();
@@ -127,7 +235,7 @@ local function craft(recipe)
         end
     end
 
-    robot.select(index[recipies[recipe].Catalyst]);
+    robot.select(index[recipes[recipe].Catalyst]);
 
     robot.forward();
     robot.turnLeft();
@@ -135,7 +243,8 @@ local function craft(recipe)
     robot.turnRight();
     robot.up();
     robot.dropDown();
-    os.sleep(recipies[recipe].Delay or 30);
+    ---@diagnostic disable-next-line: undefined-field
+    os.sleep(recipes[recipe].Delay or delay_default);
     robot.down();
     robot.down();
     robot.down();
@@ -145,12 +254,13 @@ local function craft(recipe)
     robot.up();
     robot.drop();
 
+    ---@diagnostic disable-next-line: undefined-field
     os.sleep(5);
 end
 
 local function checkInv()
     local have = {};
-    for i=1, inv.getInventorySize(sides.front) do
+    for i = 1, inv.getInventorySize(sides.front) do
         local item = inv.getStackInSlot(sides.front, i);
 
         if item ~= nil then
@@ -169,16 +279,16 @@ local function checkRecipe()
     for tag, recipe in pairs(costs) do
         local fail = false;
 
-        if recipies[tag].Weight >= weight then
+        if recipes[tag].Weight >= weight then
             for name, amount in pairs(recipe) do
                 if have[name] == nil or have[name] < amount then
                     fail = true;
                     break;
                 end
             end
-    
+
             if not fail then
-                weight = recipies[tag].Weight;
+                weight = recipes[tag].Weight;
                 best = tag;
             end
         end
@@ -200,4 +310,4 @@ while run do
     end
 end
 
-return {recipies = recipies, costs = costs, checkRecipe = checkRecipe, craft = craft, checkInv = checkInv};
+return { recipies = recipes, costs = costs, checkRecipe = checkRecipe, craft = craft, checkInv = checkInv };
