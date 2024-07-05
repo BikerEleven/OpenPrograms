@@ -25,19 +25,19 @@ end
 term.write("Enter the name of the program to install:\n");
 local name = term.read();
 name = string.gsub(name, "\n", "");
-while not fs.exists(name) do
+while name == "" or not fs.exists(name) do
+  if name == "opt" then return; end
   term.write(name.." Program not found!\n");
   name = term.read();
   name = string.gsub(name, "\n", "");
 end
 
-local diskfs = fs.proxy(disk);
-local file = diskfs.open("autorun.lua", "w");
-diskfs.write(file, "os.execute(\"program.lua\")");
-diskfs.close(file)
+local fname = string.gsub(name:match("^.+/(.+)$"), ".lua", "");
 
-local fileOut = diskfs.open("program.lua", "w");
+local diskfs = fs.proxy(disk);
+local fileOut = diskfs.open("autorun.lua", "w");
 local fileIn = io.open(name, "r");
+diskfs.setLabel(fname);
 
 local line = fileIn:read("*L");
 while line ~= nil do
