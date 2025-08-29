@@ -81,18 +81,19 @@ local recipes = {
     Giant_Machine = {
         Layers = {
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
-            "Compact Machine Wall", "Glitched Large Machine", "Compact Machine Wall",
+            "Compact Machine Wall", "tile.contenttweaker.glitched3.name", "Compact Machine Wall",
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
             --
-            "Compact Machine Wall", "Glitched Large Machine", "Compact Machine Wall",
-            "Glitched Large Machine", "Machine Casing", "Glitched Large Machine",
-            "Compact Machine Wall", "Glitched Large Machine", "Compact Machine Wall",
+            "Compact Machine Wall", "tile.contenttweaker.glitched3.name", "Compact Machine Wall",
+            "tile.contenttweaker.glitched3.name", "Machine Casing", "tile.contenttweaker.glitched3.name",
+            "Compact Machine Wall", "tile.contenttweaker.glitched3.name", "Compact Machine Wall",
             --
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
-            "Compact Machine Wall", "Glitched Large Machine", "Compact Machine Wall",
+            "Compact Machine Wall", "tile.contenttweaker.glitched3.name", "Compact Machine Wall",
             "Compact Machine Wall", "Compact Machine Wall", "Compact Machine Wall",
         },
-        Catalyst = "Ender Pearl"
+        Catalyst = "Ender Pearl",
+        Delay = 60
     },
 
     Zombie_Egg = {
@@ -252,10 +253,12 @@ local function craft(recipe)
     robot.up();
     robot.up();
     robot.up();
+    robot.turnLeft();
     robot.drop();
+    robot.turnRight();
 
     ---@diagnostic disable-next-line: undefined-field
-    os.sleep(5);
+    os.sleep(1);
 end
 
 local function checkInv()

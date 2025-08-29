@@ -1,5 +1,6 @@
 local comp = require("component");
 local fs = require("filesystem");
+local shell = require("shell");
 local term = require("term");
 local event = require("event");
 
@@ -24,7 +25,7 @@ end
 
 term.write("Enter the name of the program to install:\n");
 local name = term.read();
-name = string.gsub(name, "\n", "");
+name = shell.resolve(string.gsub(name, "\n", ""));
 while name == "" or not fs.exists(name) do
   if name == "opt" then return; end
   term.write(name.." Program not found!\n");
