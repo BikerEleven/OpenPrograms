@@ -181,22 +181,39 @@ for k, v in pairs(recipes) do
     costs[k][v.Catalyst] = (costs[k][v.Catalyst] or 0) + 1;
 end
 
+local function get(label, index)
+    for k, v in pairs(index[label]) do
+        local item = inv.getStackInInternalSlot(k);
+        if item ~= nil and item.label == label then
+            return k;
+        end
+    end
+end
+
+
 local function craft(recipe)
     local index = {};
-    local slot = 1;
+    robot.select(1);
 
     local have = {};
     for i = 1, inv.getInventorySize(sides.front) do
         local item = inv.getStackInSlot(sides.front, i);
 
         if item ~= nil and costs[recipe][item.label] ~= nil and (have[item.label] or 0) < costs[recipe][item.label] then
-            robot.select(slot);
-            index[item.label] = slot;
-
             local count = inv.suckFromSlot(sides.front, i, costs[recipe][item.label] - (have[item.label] or 0));
             have[item.label] = (have[item.label] or 0) + count;
+        end
+    end
 
-            if have[item.label] == costs[recipe][item.label] then slot = slot + 1; end
+    for i = 1, 16 do
+        local item = inv.getStackInInternalSlot(i);
+        if item ~= nil and item.label ~= "Air" then
+            if index[item.label] == nil then
+                index[item.label] = {};
+                index[item.label][i] = true;
+            else
+                index[item.label][i] = true;
+            end
         end
     end
 
@@ -213,7 +230,7 @@ local function craft(recipe)
         local item = recipes[recipe].Layers[i];
 
         if item ~= "Air" then
-            robot.select(index[item]);
+            robot.select(get(item, index));
             robot.placeDown();
         end
 
@@ -236,7 +253,7 @@ local function craft(recipe)
         end
     end
 
-    robot.select(index[recipes[recipe].Catalyst]);
+    robot.select(get(recipes[recipe].Catalyst, index));
 
     robot.forward();
     robot.turnLeft();
